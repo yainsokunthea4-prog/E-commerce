@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FreshMart – Groceries Delivered Fast</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Auth navbar styles ── */
+    .nav-user-menu {
+      position: relative;
+      display: inline-block;
+    }
+    .nav-user-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: #f0fdf4;
+      border: 1.5px solid #bbf7d0;
+      color: #15803d;
+      padding: 0.45rem 1rem;
+      border-radius: 999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+      font-family: inherit;
+    }
+    .nav-user-btn:hover { background: #dcfce7; }
+    .nav-user-btn .avatar-sm {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: #16a34a;
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .nav-dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: calc(100% + 8px);
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      min-width: 180px;
+      z-index: 1000;
+      overflow: hidden;
+    }
+    .nav-dropdown.open { display: block; }
+    .nav-dropdown a,
+    .nav-dropdown button {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      width: 100%;
+      padding: 0.7rem 1rem;
+      font-size: 0.875rem;
+      color: #374151;
+      text-decoration: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.12s;
+      text-align: left;
+    }
+    .nav-dropdown a:hover,
+    .nav-dropdown button:hover { background: #f9fafb; }
+    .nav-dropdown .dropdown-divider {
+      height: 1px;
+      background: #f3f4f6;
+      margin: 0.25rem 0;
+    }
+    .nav-dropdown .dropdown-header {
+      padding: 0.65rem 1rem 0.4rem;
+      font-size: 0.75rem;
+      color: #9ca3af;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .logout-btn { color: #b91c1c !important; }
+    .logout-btn:hover { background: #fee2e2 !important; }
+
+    /* Auth buttons when logged out */
+    .btn-outline {
+      padding: 0.45rem 1rem;
+      border: 1.5px solid #d1d5db;
+      border-radius: 999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #374151;
+      text-decoration: none;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .btn-outline:hover { border-color: #16a34a; color: #16a34a; }
+    .btn-signup {
+      padding: 0.45rem 1rem;
+      background: #16a34a;
+      color: #fff;
+      border-radius: 999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .btn-signup:hover { background: #15803d; }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="nav-inner container">
+      <a href="#" class="logo">🥬 FreshMart</a>
+      <nav class="nav-links">
+        <a href="#categories">Shop</a>
+        <a href="#deals">Deals</a>
+        <a href="#how">How it works</a>
+        <a href="#testimonials">Reviews</a>
+      </nav>
+      <div class="nav-actions">
+        <div class="search-bar">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" placeholder="Search groceries..." id="searchInput" />
+        </div>
+        <button class="cart-btn" id="cartBtn">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          Cart
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+
+        <!-- AUTH AREA — toggled by JS -->
+        <div id="navAuthArea" style="display:flex;align-items:center;gap:0.5rem;">
+          <!-- Filled dynamically by renderNavAuth() -->
+        </div>
+      </div>
+      <button class="hamburger" id="hamburger">&#9776;</button>
+    </div>
+
+    <!-- MOBILE MENU -->
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#categories">Shop</a>
+      <a href="#deals">Deals</a>
+      <a href="#how">How it works</a>
+      <a href="#testimonials">Reviews</a>
+      <div id="mobileAuthLinks">
+        <!-- Filled dynamically -->
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-text">
+        <h1>Fresh groceries,<br /><span class="accent">at your door</span></h1>
+        <p>Shop from thousands of fresh produce, pantry staples, and daily essentials. Delivered fast, every time.</p>
+        <div class="hero-cta">
+          <input type="text" placeholder="Enter your address..." class="address-input" />
+          <button class="btn-primary" onclick="document.getElementById('categories').scrollIntoView({behavior:'smooth'})">Start shopping</button>
+        </div>
+
+      </div>
+      <div class="hero-image">
+        <div class="hero-img-wrap">
+          <img src="https://i.pinimg.com/736x/af/9f/14/af9f14325588efdd925ff65da566147c.jpg" alt="Fresh groceries basket" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST BANNER -->
+  <div class="trust-bar">
+    <div class="container trust-inner">
+      <div class="trust-item"><span>🌱</span> 100% Organic options</div>
+      <div class="trust-item"><span>🚚</span> Free delivery over $50</div>
+      <div class="trust-item"><span>🔄</span> Easy returns</div>
+      <div class="trust-item"><span>🔒</span> Secure checkout</div>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <section class="section" id="categories">
+    <div class="container">
+      <div class="section-header">
+        <h2>Shop by category</h2>
+        <a href="#" class="view-all">View all →</a>
+      </div>
+      <div class="categories-grid">
+        <a href="products.html?cat=fruits" class="category-card">
+          <div class="cat-img"><img src="https://i.pinimg.com/736x/1e/c5/4d/1ec54d0a6887240b470e95bd4fd6da9f.jpg" alt="Fruits"></div>
+          <h3>Fruits</h3><span>120+ items</span>
+        </a>
+        <a href="products.html?cat=vegetables" class="category-card">
+          <div class="cat-img"><img src="https://i.pinimg.com/1200x/17/51/39/175139fee4ab5050c15347f075f0abe0.jpg" alt="Vegetables"></div>
+          <h3>Vegetables</h3><span>200+ items</span>
+        </a>
+        <a href="products.html?cat=dairy" class="category-card">
+          <div class="cat-img"><img src="https://images.unsplash.com/photo-1628088062854-d1870b4553da?w=200&h=200&fit=crop" alt="Dairy & Eggs"></div>
+          <h3>Dairy & Eggs</h3><span>80+ items</span>
+        </a>
+        <a href="products.html?cat=bakery" class="category-card">
+          <div class="cat-img"><img src="https://i.pinimg.com/1200x/3c/52/bc/3c52bc45cae1a184603f3728fc5b35dc.jpg" alt="Bakery"></div>
+          <h3>Bakery</h3><span>60+ items</span>
+        </a>
+        <a href="products.html?cat=meat" class="category-card">
+          <div class="cat-img"><img src="https://i.pinimg.com/736x/6b/86/1c/6b861ce2c2aa3ca95144fb90c86a76e5.jpg" alt="Meat & Fish"></div>
+          <h3>Meat & Fish</h3><span>90+ items</span>
+        </a>
+        <a href="products.html?cat=beverages" class="category-card">
+          <div class="cat-img"><img src="https://i.pinimg.com/736x/07/14/38/071438c061390e83b8b0443f2b8358d9.jpg" alt="Beverages"></div>
+          <h3>Beverages</h3><span>150+ items</span>
+        </a>
+        <a href="products.html?cat=snacks" class="category-card">
+          <div class="cat-img"><img src="https://images.unsplash.com/photo-1621939514649-280e2ee25f60?w=200&h=200&fit=crop" alt="Snacks"></div>
+          <h3>Snacks</h3><span>180+ items</span>
+        </a>
+        <a href="products.html?cat=organic" class="category-card">
+          <div class="cat-img"><img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=200&h=200&fit=crop" alt="Organic"></div>
+          <h3>Organic</h3><span>100+ items</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED PRODUCTS -->
+  <section class="section section--gray" id="deals">
+    <div class="container">
+      <div class="section-header">
+        <h2>Featured products</h2>
+        <div class="filter-tabs">
+          <button class="filter-tab active" data-filter="all">All</button>
+          <button class="filter-tab" data-filter="fruits">Fruits</button>
+          <button class="filter-tab" data-filter="vegetables">Vegetables</button>
+          <button class="filter-tab" data-filter="dairy">Dairy</button>
+          <button class="filter-tab" data-filter="organic">Organic</button>
+        </div>
+      </div>
+      <div class="products-grid" id="productsGrid"></div>
+    </div>
+  </section>
+
+  <!-- PROMO BANNER -->
+  <section class="promo-banner container">
+    <div class="promo-card promo-card--green">
+      <div>
+        <h3>Fresh fruit bundles</h3>
+        <p>Save 20% on seasonal fruit boxes</p>
+        <a href="products.html" class="btn-white">Shop now</a>
+      </div>
+      <div class="promo-img">🍓🍊🍋</div>
+    </div>
+    <div class="promo-card promo-card--orange">
+      <div>
+        <h3>Organic week deals</h3>
+        <p>Up to 30% off all organic products</p>
+        <a href="products.html?cat=organic" class="btn-white">Shop now</a>
+      </div>
+      <div class="promo-img">🥦🥕🌽</div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how">
+    <div class="container">
+      <div class="section-header centered">
+        <h2>How FreshMart works</h2>
+        <p>Groceries to your door in 3 easy steps</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <div class="step-icon">📍</div>
+          <h3>Enter your address</h3>
+          <p>Tell us where you are and we'll show you what's available in your area.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <div class="step-icon">🛒</div>
+          <h3>Pick your items</h3>
+          <p>Browse thousands of products and add them to your cart with one click.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <div class="step-icon">🚚</div>
+          <h3>Get it delivered</h3>
+          <p>We'll deliver your groceries fresh to your door in as little as 30 minutes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section section--gray" id="testimonials">
+    <div class="container">
+      <div class="section-header centered">
+        <h2>What our customers say</h2>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p>"Super fresh produce every time. My go-to for weekly groceries!"</p>
+          <div class="reviewer">
+            <div class="avatar">SL</div>
+            <div><strong>Sreyna L.</strong><small>Member since 2023</small></div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p>"Arrived in 25 minutes! The organic vegetables are amazing quality."</p>
+          <div class="reviewer">
+            <div class="avatar">MK</div>
+            <div><strong>Maya K.</strong><small>Member since 2022</small></div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p>"Best grocery app I've used. Easy to order and great prices too."</p>
+          <div class="reviewer">
+            <div class="avatar">JP</div>
+            <div><strong>John P.</strong><small>Member since 2024</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter-section">
+    <div class="container newsletter-inner">
+      <div>
+        <h2>Get 10% off your first order</h2>
+        <p>Sign up for deals, new arrivals, and exclusive offers.</p>
+      </div>
+      <div class="newsletter-form">
+        <input type="email" placeholder="Your email address..." />
+        <button class="btn-primary">Subscribe</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <a href="#" class="logo">🥬 FreshMart</a>
+        <p>Fresh groceries delivered fast. Serving thousands of happy families daily.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Shop</h4>
+        <a href="products.html">All Products</a>
+        <a href="products.html?cat=fruits">Fruits</a>
+        <a href="products.html?cat=vegetables">Vegetables</a>
+        <a href="products.html?cat=organic">Organic</a>
+      </div>
+      <div class="footer-links">
+        <h4>Company</h4>
+        <a href="#">About us</a>
+        <a href="#">Careers</a>
+        <a href="#">Blog</a>
+        <a href="#">Press</a>
+      </div>
+      <div class="footer-links">
+        <h4>Support</h4>
+        <a href="#">Help center</a>
+        <a href="#">Delivery info</a>
+        <a href="#">Returns</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 FreshMart. All rights reserved.</p>
+      <div class="footer-legal">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Cookies</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- CART SIDEBAR -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <aside class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h3>Your cart</h3>
+      <button class="cart-close" id="cartClose">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <div class="cart-empty">
+        <span>🛒</span>
+        <p>Your cart is empty</p>
+        <small>Add some fresh groceries!</small>
+      </div>
+    </div>
+    <div class="cart-footer" id="cartFooter" style="display:none">
+      <div class="cart-total">
+        <span>Total</span>
+        <strong id="cartTotal">$0.00</strong>
+      </div>
+      <a href="checkout.html" class="btn-primary btn-full">Checkout →</a>
+    </div>
+  </aside>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script src="auth.js"></script>
+<script>Auth.requireLogin();</script>
+  <script>
+    // ── Render navbar auth section ──────────────────────────────
+    function renderNavAuth() {
+      const user        = Auth.getSession();
+      const authArea    = document.getElementById('navAuthArea');
+      const mobileLinks = document.getElementById('mobileAuthLinks');
+
+      if (user) {
+        const initials = user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+
+        // Desktop: avatar + dropdown
+        authArea.innerHTML = `
+          <div class="nav-user-menu" id="userMenu">
+            <button class="nav-user-btn" onclick="toggleDropdown()">
+              <div class="avatar-sm">${initials}</div>
+              ${user.name.split(' ')[0]}
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="nav-dropdown" id="navDropdown">
+              <div class="dropdown-header">Signed in as</div>
+              <div style="padding:0 1rem 0.5rem;font-size:0.82rem;color:#6b7280;">${user.email}</div>
+              <div class="dropdown-divider"></div>
+              ${user.role === 'admin' ? `<a href="admin.html">⚙️ Admin Dashboard</a>` : ''}
+              <a href="#">👤 My Account</a>
+              <a href="#">📦 My Orders</a>
+              <div class="dropdown-divider"></div>
+              <button class="logout-btn" onclick="Auth.logout()">🚪 Log out</button>
+            </div>
+          </div>
+        `;
+
+        // Mobile
+        mobileLinks.innerHTML = `
+          <div style="border-top:1px solid #e5e7eb;margin-top:0.5rem;padding-top:0.5rem;">
+            ${user.role === 'admin' ? `<a href="admin.html">⚙️ Admin Dashboard</a>` : ''}
+            <a href="#">👤 My Account</a>
+            <a href="#">📦 My Orders</a>
+            <a href="#" onclick="Auth.logout(); return false;" style="color:#b91c1c;">🚪 Log out</a>
+          </div>
+        `;
+      } else {
+        // Logged out: show Sign in + Register
+        authArea.innerHTML = `
+          <a href="Login.html" class="btn-outline">Sign in</a>
+          <a href="register.html" class="btn-signup">Register</a>
+        `;
+        mobileLinks.innerHTML = `
+          <div style="border-top:1px solid #e5e7eb;margin-top:0.5rem;padding-top:0.5rem;">
+            <a href="Login.html">Sign in</a>
+            <a href="register.html">Register</a>
+          </div>
+        `;
+      }
+    }
+
+    // ── Dropdown toggle ─────────────────────────────────────────
+    function toggleDropdown() {
+      document.getElementById('navDropdown').classList.toggle('open');
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      const menu = document.getElementById('userMenu');
+      if (menu && !menu.contains(e.target)) {
+        const dd = document.getElementById('navDropdown');
+        if (dd) dd.classList.remove('open');
+      }
+    });
+
+    // ── Init ────────────────────────────────────────────────────
+    renderNavAuth();
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

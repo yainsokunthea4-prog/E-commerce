@@ -1,0 +1,48 @@
+<!--
+=============================================================
+  STEP 1 — Add this line inside <head> of index.html
+  (It must be the FIRST script — before anything else)
+=============================================================
+-->
+<script src="auth.js"></script>
+<script>
+  /* Gate: anyone not logged in gets sent to login */
+  Auth.requireLogin();
+</script>
+
+<!--
+=============================================================
+  STEP 2 — Replace your existing <script src="auth.js"></script>
+  line in index.html with the block above.
+
+  That's it! Do the same for any other page you want to protect:
+    products.html  → add the same 4 lines in <head>
+    checkout.html  → add the same 4 lines in <head>
+    admin.html     → add the same 4 lines in <head>
+=============================================================
+
+  HOW IT ALL WORKS
+  ─────────────────────────────────────────────────────────
+  localStorage key used:   fm_session   (set by auth.js)
+  localStorage key for users:  fm_users
+
+  Default admin account (auto-created by auth.js):
+    Email:    admin@freshmart.com
+    Password: admin123
+
+  Login flow:
+    1. User opens index.html
+    2. Auth.requireLogin() fires → no session → redirect to login.html
+    3. User picks tab (Customer or Admin) and signs in
+    4. On success → redirect to index.html (customer) or admin.html (admin)
+
+  Register flow:
+    1. User opens register.html
+    2. Fills form → Auth.register() saves to fm_users + sets fm_session
+    3. Success screen shows, then auto-redirect to index.html
+
+  Logout:
+    Auth.logout()  → clears fm_session → redirect to login.html
+    (Already wired in your navbar dropdown)
+=============================================================
+-->

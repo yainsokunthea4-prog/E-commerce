@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shop – FreshMart</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="nav-inner container">
+      <a href="index.html" class="logo">🥬 FreshMart</a>
+      <nav class="nav-links">
+        <a href="index.html#categories">Shop</a>
+        <a href="index.html#deals">Deals</a>
+        <a href="index.html#how">How it works</a>
+        <a href="index.html#testimonials">Reviews</a>
+      </nav>
+      <div class="nav-actions">
+        <div class="search-bar">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" placeholder="Search groceries..." id="searchInput" />
+        </div>
+        <button class="cart-btn" id="cartBtn">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          Cart <span class="cart-count" id="cartCount">0</span>
+        </button>
+        <a href="login.html" class="btn-outline">Sign in</a>
+      </div>
+      <button class="hamburger" id="hamburger">&#9776;</button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html#categories">Shop</a>
+      <a href="index.html#deals">Deals</a>
+      <a href="index.html#how">How it works</a>
+      <a href="login.html">Sign in</a>
+    </div>
+  </header>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="container">
+      <h1>All Products</h1>
+      <p>Fresh, quality groceries delivered to your door</p>
+    </div>
+  </div>
+
+  <!-- SHOP LAYOUT -->
+  <div class="shop-layout container">
+    <!-- SIDEBAR FILTERS -->
+    <aside class="shop-sidebar">
+      <h3>Categories</h3>
+      <ul class="sidebar-cats" id="sidebarCats">
+        <li class="active" data-cat="all">All Products</li>
+        <li data-cat="fruits">🍎 Fruits</li>
+        <li data-cat="vegetables">🥦 Vegetables</li>
+        <li data-cat="dairy">🥛 Dairy & Eggs</li>
+        <li data-cat="bakery">🍞 Bakery</li>
+        <li data-cat="meat">🥩 Meat & Fish</li>
+        <li data-cat="beverages">🧃 Beverages</li>
+        <li data-cat="snacks">🍿 Snacks</li>
+        <li data-cat="organic">🌿 Organic</li>
+      </ul>
+
+      <h3>Price range</h3>
+      <div class="price-filter">
+        <input type="range" min="0" max="50" value="50" id="priceRange" />
+        <span>Up to $<span id="priceVal">50</span></span>
+      </div>
+
+      <h3>Sort by</h3>
+      <select id="sortSelect" class="sort-select">
+        <option value="default">Featured</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="name">Name A–Z</option>
+      </select>
+    </aside>
+
+    <!-- PRODUCTS -->
+    <main class="shop-main">
+      <div class="shop-topbar">
+        <span id="productCount">Loading...</span>
+        <div class="view-toggle">
+          <button class="view-btn active" id="gridView">⊞</button>
+          <button class="view-btn" id="listView">☰</button>
+        </div>
+      </div>
+      <div class="products-grid" id="productsGrid"></div>
+    </main>
+  </div>
+
+  <!-- CART SIDEBAR -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <aside class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h3>Your cart</h3>
+      <button class="cart-close" id="cartClose">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <div class="cart-empty">
+        <span>🛒</span>
+        <p>Your cart is empty</p>
+        <small>Add some fresh groceries!</small>
+      </div>
+    </div>
+    <div class="cart-footer" id="cartFooter" style="display:none">
+      <div class="cart-total">
+        <span>Total</span>
+        <strong id="cartTotal">$0.00</strong>
+      </div>
+      <a href="checkout.html" class="btn-primary btn-full">Checkout →</a>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast"></div>
+  <script src="script.js"></script>
+</body>
+</html>

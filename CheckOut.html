@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout – FreshMart</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="nav-inner container">
+      <a href="index.html" class="logo">🥬 FreshMart</a>
+      <nav class="nav-links"></nav>
+      <div class="nav-actions">
+        <a href="index.html" class="btn-outline">← Continue shopping</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>Checkout</h1>
+      <p>Almost there! Fill in your details below.</p>
+    </div>
+  </div>
+
+  <div class="checkout-layout container">
+    <!-- FORM -->
+    <div class="checkout-form-wrap">
+      <div class="checkout-card">
+        <h3>Delivery address</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>First name</label>
+            <input type="text" placeholder="Sreyna" />
+          </div>
+          <div class="form-group">
+            <label>Last name</label>
+            <input type="text" placeholder="Chan" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="you@email.com" />
+        </div>
+        <div class="form-group">
+          <label>Phone number</label>
+          <input type="tel" placeholder="+855 ..." />
+        </div>
+        <div class="form-group">
+          <label>Street address</label>
+          <input type="text" placeholder="123 Street Name" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>City</label>
+            <input type="text" placeholder="Phnom Penh" />
+          </div>
+          <div class="form-group">
+            <label>Postal code</label>
+            <input type="text" placeholder="12000" />
+          </div>
+        </div>
+      </div>
+
+      <div class="checkout-card">
+        <h3>Delivery time</h3>
+        <div class="delivery-options">
+          <label class="delivery-option selected">
+            <input type="radio" name="delivery" value="express" checked />
+            <div>
+              <strong>🚀 Express (30 min)</strong>
+              <small>$3.99 delivery fee</small>
+            </div>
+          </label>
+          <label class="delivery-option">
+            <input type="radio" name="delivery" value="standard" />
+            <div>
+              <strong>🚚 Standard (2 hours)</strong>
+              <small>$1.99 delivery fee</small>
+            </div>
+          </label>
+          <label class="delivery-option">
+            <input type="radio" name="delivery" value="free" />
+            <div>
+              <strong>🆓 Free (4 hours)</strong>
+              <small>Free for orders over $50</small>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="checkout-card">
+        <h3>Payment</h3>
+        <div class="payment-options">
+          <label class="delivery-option selected">
+            <input type="radio" name="payment" value="card" checked />
+            <div><strong>💳 Credit / Debit card</strong></div>
+          </label>
+          <label class="delivery-option">
+            <input type="radio" name="payment" value="cod" />
+            <div><strong>💵 Cash on delivery</strong></div>
+          </label>
+        </div>
+        <div class="card-fields" id="cardFields">
+          <div class="form-group">
+            <label>Card number</label>
+            <input type="text" placeholder="1234 5678 9012 3456" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Expiry</label>
+              <input type="text" placeholder="MM/YY" />
+            </div>
+            <div class="form-group">
+              <label>CVV</label>
+              <input type="text" placeholder="123" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORDER SUMMARY -->
+    <div class="order-summary">
+      <div class="checkout-card sticky-card">
+        <h3>Order summary</h3>
+        <div class="order-items" id="orderItems"></div>
+        <div class="order-line"><span>Subtotal</span><span id="orderSubtotal">$0.00</span></div>
+        <div class="order-line"><span>Delivery</span><span id="orderDelivery">$3.99</span></div>
+        <div class="order-line order-line--total"><span>Total</span><strong id="orderTotal">$0.00</strong></div>
+        <button class="btn-primary btn-full" id="placeOrderBtn">Place order →</button>
+        <p class="checkout-note">🔒 Secure checkout powered by FreshMart</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUCCESS MODAL -->
+  <div class="modal-overlay" id="successOverlay" style="display:none">
+    <div class="success-modal">
+      <div class="success-icon">🎉</div>
+      <h2>Order placed!</h2>
+      <p>Your groceries are on their way. Expected in <strong>30 minutes</strong>.</p>
+      <p class="order-id">Order #FM-<span id="orderId"></span></p>
+      <a href="index.html" class="btn-primary">Back to home</a>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="script.js"></script>
+</body>
+</html>

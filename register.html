@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register – FreshMart</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Navbar ── */
+    .navbar {
+      background: #fff;
+      border-bottom: 1px solid #e0ede0;
+      padding: 0 2rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .logo { font-size: 1.35rem; font-weight: 800; color: #2e7d32; text-decoration: none; }
+    .nav-signin { font-size: .875rem; color: #555; }
+    .nav-signin a { color: #2e7d32; font-weight: 700; text-decoration: none; }
+    .nav-signin a:hover { text-decoration: underline; }
+
+    /* ── Page ── */
+    .page {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 40px rgba(46,125,50,.13);
+      padding: 2.5rem 2.2rem;
+      width: 100%;
+      max-width: 460px;
+    }
+    .card-logo { text-align: center; font-size: 2rem; margin-bottom: .3rem; }
+    .card-title { text-align: center; font-size: 1.45rem; font-weight: 800; color: #1b5e20; margin-bottom: .3rem; }
+    .card-sub   { text-align: center; font-size: .875rem; color: #888; margin-bottom: 1.6rem; }
+
+    /* ── Form ── */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label {
+      display: block;
+      font-size: .82rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 5px;
+    }
+    .input-wrap { position: relative; }
+    .input-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: .95rem;
+      pointer-events: none;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 11px 14px 11px 38px;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 10px;
+      font-size: .9rem;
+      background: #fafafa;
+      color: #111;
+      outline: none;
+      transition: border-color .2s, background .2s;
+      font-family: inherit;
+    }
+    .form-group input.no-icon { padding-left: 14px; }
+    .form-group input:focus { border-color: #2e7d32; background: #fff; }
+    .form-group input.is-error { border-color: #ef4444; }
+
+    .pw-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: .95rem;
+      color: #9ca3af;
+    }
+
+    .field-error {
+      font-size: .78rem;
+      color: #ef4444;
+      margin-top: 4px;
+      display: none;
+    }
+    .field-error.show { display: block; }
+
+    /* strength bar */
+    .strength-row { display: flex; gap: 4px; margin-top: 6px; }
+    .seg { flex: 1; height: 4px; border-radius: 4px; background: #e5e7eb; transition: background .3s; }
+    .strength-label { font-size: .75rem; margin-top: 3px; color: #9ca3af; }
+
+    /* terms */
+    .check-group {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 1.2rem;
+    }
+    .check-group input[type="checkbox"] {
+      width: 16px; height: 16px; margin-top: 2px;
+      accent-color: #2e7d32; flex-shrink: 0;
+    }
+    .check-group label { font-size: .83rem; color: #555; line-height: 1.45; }
+    .check-group a { color: #2e7d32; font-weight: 600; text-decoration: none; }
+    .check-group a:hover { text-decoration: underline; }
+
+    /* alert */
+    .alert {
+      background: #fee2e2;
+      border: 1px solid #fca5a5;
+      color: #991b1b;
+      border-radius: 10px;
+      padding: .75rem 1rem;
+      font-size: .85rem;
+      margin-bottom: 1rem;
+      display: none;
+      gap: 8px;
+      align-items: center;
+    }
+    .alert.show { display: flex; }
+
+    /* submit */
+    .btn-submit {
+      width: 100%;
+      background: #2e7d32;
+      color: #fff;
+      border: none;
+      padding: 13px;
+      border-radius: 99px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s, transform .1s;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-submit:hover  { background: #1b5e20; }
+    .btn-submit:active { transform: scale(.98); }
+    .btn-submit:disabled { background: #a7f3d0; cursor: not-allowed; }
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .signin-link {
+      text-align: center;
+      margin-top: 1.2rem;
+      font-size: .875rem;
+      color: #6b7280;
+    }
+    .signin-link a { color: #2e7d32; font-weight: 700; text-decoration: none; }
+    .signin-link a:hover { text-decoration: underline; }
+
+    /* ── Success screen ── */
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 1rem 0;
+    }
+    .check-circle {
+      width: 74px; height: 74px;
+      background: #dcfce7;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto 1rem;
+    }
+    .success-screen h3 { font-size: 1.35rem; font-weight: 800; color: #166534; margin-bottom: .4rem; }
+    .success-screen p  { font-size: .9rem; color: #6b7280; margin-bottom: 1.5rem; }
+    .success-screen .countdown { font-size: .85rem; color: #9ca3af; margin-top: .5rem; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="logo" href="index.html">🥬 FreshMart</a>
+  <span class="nav-signin">Already a member? <a href="login.html">Sign in</a></span>
+</nav>
+
+<div class="page">
+  <div class="card">
+
+    <!-- ── Register form ── -->
+    <div id="formSection">
+      <div class="card-logo">🛒</div>
+      <div class="card-title">Create your account</div>
+      <div class="card-sub">Join FreshMart and get groceries delivered fast</div>
+
+      <!-- Error alert -->
+      <div class="alert" id="alertBox">
+        <span>⚠️</span><span id="alertMsg"></span>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <div class="input-wrap">
+            <span class="input-icon">👤</span>
+            <input type="text" id="firstName" placeholder="John" />
+          </div>
+          <div class="field-error" id="err-firstName">Enter your first name.</div>
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <div class="input-wrap">
+            <span class="input-icon">👤</span>
+            <input type="text" id="lastName" placeholder="Doe" />
+          </div>
+          <div class="field-error" id="err-lastName">Enter your last name.</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <div class="input-wrap">
+          <span class="input-icon">📧</span>
+          <input type="email" id="email" placeholder="john@example.com" autocomplete="email" />
+        </div>
+        <div class="field-error" id="err-email">Enter a valid email address.</div>
+      </div>
+
+      <div class="form-group">
+        <label>Phone Number</label>
+        <div class="input-wrap">
+          <span class="input-icon">📱</span>
+          <input type="tel" id="phone" placeholder="+855 12 345 678" />
+        </div>
+        <div class="field-error" id="err-phone">Enter a valid phone number.</div>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-wrap">
+          <span class="input-icon">🔒</span>
+          <input type="password" id="password" placeholder="Create a password" oninput="checkStrength()" />
+          <button class="pw-toggle" type="button" onclick="togglePw('password',this)">👁️</button>
+        </div>
+        <div class="strength-row">
+          <div class="seg" id="s1"></div>
+          <div class="seg" id="s2"></div>
+          <div class="seg" id="s3"></div>
+          <div class="seg" id="s4"></div>
+        </div>
+        <div class="strength-label" id="strengthLabel"></div>
+        <div class="field-error" id="err-password">Password must be at least 6 characters.</div>
+      </div>
+
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <div class="input-wrap">
+          <span class="input-icon">🔒</span>
+          <input type="password" id="confirmPassword" placeholder="Repeat your password" />
+          <button class="pw-toggle" type="button" onclick="togglePw('confirmPassword',this)">👁️</button>
+        </div>
+        <div class="field-error" id="err-confirmPassword">Passwords do not match.</div>
+      </div>
+
+      <div class="check-group">
+        <input type="checkbox" id="terms" />
+        <label for="terms">
+          I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+        </label>
+      </div>
+      <div class="field-error" id="err-terms" style="margin-top:-10px;margin-bottom:12px;">
+        You must accept the terms.
+      </div>
+
+      <button class="btn-submit" id="registerBtn" onclick="handleRegister()">
+        <div class="spinner" id="spinner"></div>
+        <span id="btnLabel">Create Account</span>
+      </button>
+
+      <div class="signin-link">
+        Already have an account? <a href="login.html">Sign in</a>
+      </div>
+    </div>
+
+    <!-- ── Success screen ── -->
+    <div class="success-screen" id="successScreen">
+      <div class="check-circle">✅</div>
+      <h3>Account Created!</h3>
+      <p>Welcome to FreshMart! You're now signed in and ready to shop fresh groceries.</p>
+      <div class="countdown" id="countdown">Redirecting to homepage in <b id="countNum">3</b>s…</div>
+    </div>
+
+  </div>
+</div>
+
+<script src="auth.js"></script>
+<script>
+  /* ── Redirect if already logged in ── */
+  Auth.requireGuest();
+
+  /* ── Helpers ── */
+  function showErr(id, msg) {
+    const el = document.getElementById('err-' + id);
+    if (msg) el.textContent = msg;
+    el.classList.add('show');
+    const inp = document.getElementById(id);
+    if (inp) inp.classList.add('is-error');
+  }
+  function clearErr(id) {
+    document.getElementById('err-' + id)?.classList.remove('show');
+    document.getElementById(id)?.classList.remove('is-error');
+  }
+  function clearAll() {
+    ['firstName','lastName','email','phone','password','confirmPassword','terms'].forEach(clearErr);
+    document.getElementById('alertBox').classList.remove('show');
+  }
+
+  function togglePw(id, btn) {
+    const inp = document.getElementById(id);
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+    btn.textContent = inp.type === 'password' ? '👁️' : '🙈';
+  }
+
+  function checkStrength() {
+    const pw   = document.getElementById('password').value;
+    const segs = ['s1','s2','s3','s4'].map(id => document.getElementById(id));
+    const lbl  = document.getElementById('strengthLabel');
+    let score  = 0;
+    if (pw.length >= 6)  score++;
+    if (pw.length >= 10) score++;
+    if (/[A-Z]/.test(pw) && /[0-9]/.test(pw)) score++;
+    if (/[^A-Za-z0-9]/.test(pw)) score++;
+    const colors = ['#ef4444','#f97316','#eab308','#22c55e'];
+    const labels = ['Weak','Fair','Good','Strong'];
+    segs.forEach((s, i) => s.style.background = i < score ? colors[score-1] : '#e5e7eb');
+    lbl.textContent = pw.length ? (labels[score-1] || '') : '';
+    lbl.style.color = score > 0 ? colors[score-1] : '#9ca3af';
+  }
+
+  function setLoading(on) {
+    document.getElementById('registerBtn').disabled          = on;
+    document.getElementById('spinner').style.display         = on ? 'block' : 'none';
+    document.getElementById('btnLabel').textContent          = on ? 'Creating account…' : 'Create Account';
+  }
+
+  /* ── Register handler ── */
+  function handleRegister() {
+    clearAll();
+    let valid = true;
+
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName  = document.getElementById('lastName').value.trim();
+    const email     = document.getElementById('email').value.trim();
+    const phone     = document.getElementById('phone').value.trim();
+    const password  = document.getElementById('password').value;
+    const confirm   = document.getElementById('confirmPassword').value;
+    const terms     = document.getElementById('terms').checked;
+
+    if (!firstName)  { showErr('firstName', 'Enter your first name.');  valid = false; }
+    if (!lastName)   { showErr('lastName',  'Enter your last name.');   valid = false; }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showErr('email', 'Enter a valid email address.'); valid = false;
+    }
+    if (!phone || phone.replace(/\D/g,'').length < 7) {
+      showErr('phone', 'Enter a valid phone number.'); valid = false;
+    }
+    if (password.length < 6) {
+      showErr('password', 'Password must be at least 6 characters.'); valid = false;
+    }
+    if (password !== confirm) {
+      showErr('confirmPassword', 'Passwords do not match.'); valid = false;
+    }
+    if (!terms) { showErr('terms', 'You must accept the terms.'); valid = false; }
+    if (!valid) return;
+
+    setLoading(true);
+
+    setTimeout(() => {
+      const result = Auth.register({
+        name:     firstName + ' ' + lastName,
+        email, phone, password,
+        role: 'customer'
+      });
+
+      setLoading(false);
+
+      if (!result.ok) {
+        document.getElementById('alertMsg').textContent = result.error;
+        document.getElementById('alertBox').classList.add('show');
+        return;
+      }
+
+      /* ── Show success + countdown ── */
+      document.getElementById('formSection').style.display  = 'none';
+      document.getElementById('successScreen').style.display = 'block';
+
+      let n = 3;
+      const interval = setInterval(() => {
+        n--;
+        document.getElementById('countNum').textContent = n;
+        if (n <= 0) {
+          clearInterval(interval);
+          window.location.href = 'index.html';
+        }
+      }, 1000);
+    }, 700);
+  }
+
+  /* Clear errors on input */
+  ['firstName','lastName','email','phone','password','confirmPassword'].forEach(id => {
+    document.getElementById(id)?.addEventListener('input', () => clearErr(id));
+  });
+
+  /* Enter key submit */
+  document.addEventListener('keydown', e => { if (e.key === 'Enter') handleRegister(); });
+</script>
+</body>
+</html>
